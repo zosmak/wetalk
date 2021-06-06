@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WetalkAPI</name>
+    </assembly>
+    <members>
+        <member name="M:MovieseekAPI.Controllers.UsersController.GetAll">
+            <summary>
+            Gets all users
+            </summary>
+            <response code="201">Returns the users</response>
+            <response code="401">Unauthorized</response>
+        </member>
+        <member name="M:MovieseekAPI.Controllers.UsersController.GetById(System.Int32)">
+            <summary>
+            Get a user by id
+            </summary>
+            <response code="200">Returns the user</response>
+            <response code="401">Unauthorized</response>            
+            <response code="404">User wasn't found</response>
+        </member>
+        <member name="M:MovieseekAPI.Controllers.UsersController.Authenticate(WetalkAPI.Models.Users.AuthenticateUserModel)">
+            <summary>
+            Authenticate a user
+            </summary>
+            <response code="200">Returns the user with access token</response>
+            <response code="400">Bad request</response>            
+        </member>
+        <member name="M:MovieseekAPI.Controllers.UsersController.Register(WetalkAPI.Models.Users.RegisterUserModel)">
+            <summary>
+            Creates a user
+            </summary>
+            <response code="200">Returns the created user autenticated</response>
+            <response code="400">Bad request</response>            
+        </member>
+        <member name="M:MovieseekAPI.Controllers.UsersController.Update(System.Int32,WetalkAPI.Models.Users.UpdateUserModel)">
+            <summary>
+            Updates an user
+            </summary>
+            <response code="200">Returns the updated user</response>
+            <response code="400">Bad request</response>            
+            <response code="401">Unauthorized</response>            
+            <response code="404">Movie wasn't found</response>
+        </member>
+        <member name="M:MovieseekAPI.Controllers.UsersController.Delete(System.Int32)">
+            <summary>
+            Deletes an user
+            </summary>
+            <response code="204"></response>
+            <response code="401">Unauthorized</response>            
+            <response code="404">User wasn't found</response>            
+        </member>
+    </members>
+</doc>
