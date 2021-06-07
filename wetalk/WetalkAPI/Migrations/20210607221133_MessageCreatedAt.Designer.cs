@@ -10,8 +10,8 @@ using WetalkAPI.Helpers;
 namespace WetalkAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210607200855_ChatEntities")]
-    partial class ChatEntities
+    [Migration("20210607221133_MessageCreatedAt")]
+    partial class MessageCreatedAt
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -63,8 +63,11 @@ namespace WetalkAPI.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ChatID")
+                    b.Property<int>("ChatID")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -208,15 +211,19 @@ namespace WetalkAPI.Migrations
 
             modelBuilder.Entity("WetalkAPI.Entities.Message", b =>
                 {
-                    b.HasOne("WetalkAPI.Entities.Chat", null)
+                    b.HasOne("WetalkAPI.Entities.Chat", "Chat")
                         .WithMany("Messages")
-                        .HasForeignKey("ChatID");
+                        .HasForeignKey("ChatID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("WetalkAPI.Entities.User", "Sender")
                         .WithMany()
                         .HasForeignKey("SenderID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Chat");
 
                     b.Navigation("Sender");
                 });

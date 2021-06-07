@@ -37,6 +37,11 @@ namespace WetalkAPI.Helpers
                .HasOne(a => a.User)
                .WithMany().OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<Message>()
+               .HasOne(a => a.Sender)
+               .WithMany().OnDelete(DeleteBehavior.Restrict);
+
+
             modelBuilder.Entity<ChatMember>()
                 .HasOne(a => a.Chat)
                 .WithMany().OnDelete(DeleteBehavior.Restrict);

@@ -4,12 +4,13 @@ using System.Text.Json.Serialization;
 
 namespace WetalkAPI.Models.Chat
 {
-    public class CreateChatModel
+    public class ChatModel
     {
         [Required]
-        public string Name { get; set; }
-
+        public int ID { get; set; }
         [Required]
-        public List<string> Members { get; set; }
+        public string Name { get; set; }
+        [Required]
+        public int OwnerID { get; set; }
     }
 }

@@ -59,7 +59,7 @@ namespace WetalkAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     SenderID = table.Column<int>(type: "int", nullable: false),
-                    ChatID = table.Column<int>(type: "int", nullable: true)
+                    ChatID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -69,13 +69,13 @@ namespace WetalkAPI.Migrations
                         column: x => x.ChatID,
                         principalTable: "Chats",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Messages_Users_SenderID",
                         column: x => x.SenderID,
                         principalTable: "Users",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(

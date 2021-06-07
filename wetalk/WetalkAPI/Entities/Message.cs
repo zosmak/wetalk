@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WetalkAPI.Entities
 {
@@ -8,5 +9,9 @@ namespace WetalkAPI.Entities
         public string Description { get; set; }
         public int SenderID { get; set; }
         public User Sender { get; set; }
+        public DateTime CreatedAt { get; set; }
+
+        public int ChatID { get; set; }
+        public Chat Chat { get; set; }
     }
 }

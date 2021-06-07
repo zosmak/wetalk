@@ -6,18 +6,34 @@
     <members>
         <member name="M:WetalkAPI.Controllers.ChatsController.GetAll">
             <summary>
-            Gets all users
+            Gets all user chats
             </summary>
             <response code="200">Returns the user chat</response>
             <response code="401">Unauthorized</response>
         </member>
         <member name="M:WetalkAPI.Controllers.ChatsController.Create(WetalkAPI.Models.Chat.CreateChatModel)">
             <summary>
-            Creates a user
+            Creates a chat
             </summary>
-            <response code="200">Returns the created user</response>
+            <response code="200">Returns the created chat</response>
             <response code="400">Bad request</response>            
-            <response code="403">Forbidden</response>            
+            <response code="401">Unauthorized</response>            
+        </member>
+        <member name="M:WetalkAPI.Controllers.ChatsController.Create(System.Int32,WetalkAPI.Models.Chat.CreateChatMessageModel)">
+            <summary>
+            Creates a chat message
+            </summary>
+            <response code="200">Returns the created message</response>
+            <response code="400">Bad request</response>            
+            <response code="401">Unauthorized</response>            
+        </member>
+        <member name="M:WetalkAPI.Controllers.ChatsController.Delete(System.Int32)">
+            <summary>
+            Deletes a chat message
+            </summary>
+            <response code="204">No content</response>
+            <response code="400">Bad request</response>            
+            <response code="401">Unauthorized</response>            
         </member>
         <member name="M:WetalkAPI.Controllers.FilesController.UploadFile(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>

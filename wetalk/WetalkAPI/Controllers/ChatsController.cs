@@ -14,6 +14,7 @@ using AutoMapper;
 using WetalkAPI.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using WetalkAPI.Models.Chat;
+using System.Linq;
 
 namespace WetalkAPI.Controllers
 {
@@ -39,25 +40,38 @@ namespace WetalkAPI.Controllers
         }
 
         /// <summary>
-        /// Gets all users
+        /// Gets all user chats
         /// </summary>
         /// <response code="200">Returns the user chat</response>
         /// <response code="401">Unauthorized</response>
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
         public IActionResult GetAll()
         {
-            var userChats = _chatService.GetAll(1);
+            if (User.Identity.Name != null)
+            {
+                try
+                {
+                    // create new chat
+                    var userChats = _chatService.GetAll(int.Parse(User.Identity.Name));
+                    return Ok(userChats);
+                }
+                catch (Exception ex)
+                {
+                    // return error message if there was an exception
+                    return BadRequest(new { message = ex.Message });
+                }
+            }
 
-            return Ok(userChats);
+            return Forbid();
         }
 
         /// <summary>
-        /// Creates a user
+        /// Creates a chat
         /// </summary>
-        /// <response code="200">Returns the created user</response>
+        /// <response code="200">Returns the created chat</response>
         /// <response code="400">Bad request</response>            
-        /// <response code="403">Forbidden</response>            
+        /// <response code="401">Unauthorized</response>            
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpPost]
         public IActionResult Create([FromBody] CreateChatModel model)
@@ -82,12 +96,17 @@ namespace WetalkAPI.Controllers
                     Chat newChat = _chatService.CreateChat(chatEntity);
 
                     // update chat members
-                    foreach (int memberID in model.Members)
+                    _chatService.CreateChatMember(newChat.ID, int.Parse(User.Identity.Name));
+
+                    foreach (string username in model.Members)
                     {
-                        _chatService.CreateChatMember(newChat.ID, memberID);
+                        var user = _userService.GetByUsername(username);
+                        _chatService.CreateChatMember(newChat.ID, user.ID);
                     }
 
-                    return Ok(newChat);
+                    var result = _mapper.Map<ChatModel>(newChat);
+
+                    return Ok(result);
                 }
                 catch (Exception ex)
                 {
@@ -96,7 +115,84 @@ namespace WetalkAPI.Controllers
                 }
             }
 
-            return Forbid();
+            return Unauthorized();
+        }
+
+        /// <summary>
+        /// Creates a chat message
+        /// </summary>
+        /// <response code="200">Returns the created message</response>
+        /// <response code="400">Bad request</response>            
+        /// <response code="401">Unauthorized</response>            
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPost("{id}/message")]
+        public IActionResult Create(int id, [FromBody] CreateChatMessageModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                ModelState.AddModelError("error", "invalid request body");
+                return BadRequest(ModelState);
+            }
+
+            if (User.Identity.Name != null)
+            {
+                // check if current user is a member
+                var currentUserChats = _chatService.GetAll(int.Parse(User.Identity.Name));
+
+                if (currentUserChats.Any(x => x.ID == id))
+                {
+                    try
+                    {
+                        _chatService.CreateChatMessage(id, int.Parse(User.Identity.Name), model.Message);
+                        return Ok();
+                    }
+                    catch (Exception ex)
+                    {
+                        // return error message if there was an exception
+                        return BadRequest(new { message = ex.Message });
+                    }
+                }
+                return BadRequest("The chat doens't exist or the user isn't in that chat");
+            }
+
+            return Unauthorized();
+        }
+
+        /// <summary>
+        /// Deletes a chat message
+        /// </summary>
+        /// <response code="204">No content</response>
+        /// <response code="400">Bad request</response>            
+        /// <response code="401">Unauthorized</response>            
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpDelete("message/{messageID}")]
+        public IActionResult Delete(int messageID)
+        {
+            try
+            {
+                if (User.Identity.Name != null)
+                {
+                    // check if current user is the sender of message
+                    var message = _chatService.GetMessageByID(messageID);
+
+                    if (message != null && message.SenderID == int.Parse(User.Identity.Name))
+                    {
+                        _chatService.DeleteChatMessage(messageID);
+                        return NoContent();
+                    }
+                    return BadRequest("Message not found or user doens't have permission to remove it");
+                }
+
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
+            }
         }
     }
 }
