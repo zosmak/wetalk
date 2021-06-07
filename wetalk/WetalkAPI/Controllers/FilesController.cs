@@ -14,7 +14,7 @@ using WetalkAPI.Entities;
 using System.Collections.Generic;
 using WetalkAPI.Models.Files;
 
-namespace MovieseekAPI.Controllers
+namespace WetalkAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace WetalkAPI.Entities
 {
-    public class ChatOwner
+    public class ChatMember
     {
         [Key]
         public int ChatID { get; set; }

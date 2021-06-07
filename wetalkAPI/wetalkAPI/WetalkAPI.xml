@@ -4,7 +4,22 @@
         <name>WetalkAPI</name>
     </assembly>
     <members>
-        <member name="M:MovieseekAPI.Controllers.FilesController.UploadFile(Microsoft.AspNetCore.Http.IFormFile)">
+        <member name="M:WetalkAPI.Controllers.ChatsController.GetAll">
+            <summary>
+            Gets all users
+            </summary>
+            <response code="200">Returns the user chat</response>
+            <response code="401">Unauthorized</response>
+        </member>
+        <member name="M:WetalkAPI.Controllers.ChatsController.Create(WetalkAPI.Models.Chat.CreateChatModel)">
+            <summary>
+            Creates a user
+            </summary>
+            <response code="200">Returns the created user</response>
+            <response code="400">Bad request</response>            
+            <response code="403">Forbidden</response>            
+        </member>
+        <member name="M:WetalkAPI.Controllers.FilesController.UploadFile(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             Upload an user file
             </summary>
@@ -12,7 +27,7 @@
             <response code="401">Unauthorized</response>
             <response code="400">Bad request</response>
         </member>
-        <member name="M:MovieseekAPI.Controllers.FilesController.Download(System.String)">
+        <member name="M:WetalkAPI.Controllers.FilesController.Download(System.String)">
             <summary>
             Download an user file
             </summary>
@@ -20,7 +35,7 @@
             <response code="401">Unauthorized</response>
             <response code="400">Bad request</response>
         </member>
-        <member name="M:MovieseekAPI.Controllers.FilesController.GetUserFiles">
+        <member name="M:WetalkAPI.Controllers.FilesController.GetUserFiles">
             <summary>
             Get user files list
             </summary>
@@ -28,7 +43,7 @@
             <response code="401">Unauthorized</response>
             <response code="400">Bad request</response>
         </member>
-        <member name="M:MovieseekAPI.Controllers.FilesController.DeleteUserFile(System.String)">
+        <member name="M:WetalkAPI.Controllers.FilesController.DeleteUserFile(System.String)">
             <summary>
             Remove an user file
             </summary>
@@ -36,21 +51,21 @@
             <response code="401">Unauthorized</response>
             <response code="400">Bad request</response>
         </member>
-        <member name="M:MovieseekAPI.Controllers.UsersController.Authenticate(WetalkAPI.Models.Users.AuthenticateUserModel)">
+        <member name="M:WetalkAPI.Controllers.UsersController.Authenticate(WetalkAPI.Models.Users.AuthenticateUserModel)">
             <summary>
             Authenticate a user
             </summary>
             <response code="200">Returns the user with access token</response>
             <response code="400">Bad request</response>            
         </member>
-        <member name="M:MovieseekAPI.Controllers.UsersController.Register(WetalkAPI.Models.Users.RegisterUserModel)">
+        <member name="M:WetalkAPI.Controllers.UsersController.Register(WetalkAPI.Models.Users.RegisterUserModel)">
             <summary>
             Creates a user
             </summary>
             <response code="200">Returns the created user autenticated</response>
             <response code="400">Bad request</response>            
         </member>
-        <member name="M:MovieseekAPI.Controllers.UsersController.GetAll">
+        <member name="M:WetalkAPI.Controllers.UsersController.GetAll">
             <summary>
             Gets all users
             </summary>
@@ -58,7 +73,7 @@
             <response code="401">Unauthorized</response>
             <response code="403">Forbidden</response>
         </member>
-        <member name="M:MovieseekAPI.Controllers.UsersController.GetById(System.Int32)">
+        <member name="M:WetalkAPI.Controllers.UsersController.GetById(System.Int32)">
             <summary>
             Get a user by id
             </summary>
@@ -67,7 +82,7 @@
             <response code="403">Forbidden</response>
             <response code="404">User wasn't found</response>
         </member>
-        <member name="M:MovieseekAPI.Controllers.UsersController.Create(WetalkAPI.Models.Users.CreateUserModel)">
+        <member name="M:WetalkAPI.Controllers.UsersController.Create(WetalkAPI.Models.Users.CreateUserModel)">
             <summary>
             Creates a user
             </summary>
@@ -75,7 +90,7 @@
             <response code="400">Bad request</response>            
             <response code="403">Forbidden</response>            
         </member>
-        <member name="M:MovieseekAPI.Controllers.UsersController.Update(System.Int32,WetalkAPI.Models.Users.UpdateUserModel)">
+        <member name="M:WetalkAPI.Controllers.UsersController.Update(System.Int32,WetalkAPI.Models.Users.UpdateUserModel)">
             <summary>
             Updates an user
             </summary>
@@ -84,7 +99,7 @@
             <response code="401">Unauthorized</response>            
             <response code="404">User wasn't found</response>
         </member>
-        <member name="M:MovieseekAPI.Controllers.UsersController.ChangePassword(WetalkAPI.Models.Users.ChangePasswordModel)">
+        <member name="M:WetalkAPI.Controllers.UsersController.ChangePassword(WetalkAPI.Models.Users.ChangePasswordModel)">
             <summary>
             Updates an user
             </summary>
@@ -92,7 +107,7 @@
             <response code="400">Bad request</response>            
             <response code="401">Unauthorized</response>            
         </member>
-        <member name="M:MovieseekAPI.Controllers.UsersController.Delete(System.Int32)">
+        <member name="M:WetalkAPI.Controllers.UsersController.Delete(System.Int32)">
             <summary>
             Deletes an user
             </summary>

@@ -14,7 +14,7 @@ using AutoMapper;
 using WetalkAPI.Entities;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-namespace MovieseekAPI.Controllers
+namespace WetalkAPI.Controllers
 {
     [ApiController]
     [Route("[controller]")]

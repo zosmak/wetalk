@@ -29,12 +29,17 @@ namespace WetalkAPI.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("OwnerID")
+                        .HasColumnType("int");
+
                     b.HasKey("ID");
+
+                    b.HasIndex("OwnerID");
 
                     b.ToTable("Chats");
                 });
 
-            modelBuilder.Entity("WetalkAPI.Entities.ChatOwner", b =>
+            modelBuilder.Entity("WetalkAPI.Entities.ChatMember", b =>
                 {
                     b.Property<int>("UserID")
                         .HasColumnType("int");
@@ -46,7 +51,7 @@ namespace WetalkAPI.Migrations
 
                     b.HasIndex("ChatID");
 
-                    b.ToTable("ChatOwners");
+                    b.ToTable("ChatMembers");
                 });
 
             modelBuilder.Entity("WetalkAPI.Entities.Message", b =>
@@ -169,18 +174,29 @@ namespace WetalkAPI.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WetalkAPI.Entities.ChatOwner", b =>
+            modelBuilder.Entity("WetalkAPI.Entities.Chat", b =>
+                {
+                    b.HasOne("WetalkAPI.Entities.User", "Owner")
+                        .WithMany()
+                        .HasForeignKey("OwnerID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("WetalkAPI.Entities.ChatMember", b =>
                 {
                     b.HasOne("WetalkAPI.Entities.Chat", "Chat")
                         .WithMany()
                         .HasForeignKey("ChatID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("WetalkAPI.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Chat");

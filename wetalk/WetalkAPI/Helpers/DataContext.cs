@@ -33,6 +33,14 @@ namespace WetalkAPI.Helpers
                 .HasOne(a => a.Message)
                 .WithMany().OnDelete(DeleteBehavior.Restrict);
 
+            modelBuilder.Entity<ChatMember>()
+               .HasOne(a => a.User)
+               .WithMany().OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ChatMember>()
+                .HasOne(a => a.Chat)
+                .WithMany().OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<UserPermission>().HasData(
                 new UserPermission
                 {
@@ -47,7 +55,7 @@ namespace WetalkAPI.Helpers
             );
 
             modelBuilder.Entity<MessageRead>().HasKey(l => new { l.UserID, l.MessageID });
-            modelBuilder.Entity<ChatOwner>().HasKey(l => new { l.UserID, l.ChatID });
+            modelBuilder.Entity<ChatMember>().HasKey(l => new { l.UserID, l.ChatID });
         }
 
 
@@ -57,6 +65,6 @@ namespace WetalkAPI.Helpers
         public DbSet<Message> Messages { get; set; }
         public DbSet<MessageRead> MessagesReads { get; set; }
         public DbSet<Chat> Chats { get; set; }
-        public DbSet<ChatOwner> ChatOwners { get; set; }
+        public DbSet<ChatMember> ChatMembers { get; set; }
     }
 }

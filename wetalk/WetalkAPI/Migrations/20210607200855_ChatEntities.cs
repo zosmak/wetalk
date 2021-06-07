@@ -13,15 +13,22 @@ namespace WetalkAPI.Migrations
                 {
                     ID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OwnerID = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Chats", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Chats_Users_OwnerID",
+                        column: x => x.OwnerID,
+                        principalTable: "Users",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ChatOwners",
+                name: "ChatMembers",
                 columns: table => new
                 {
                     ChatID = table.Column<int>(type: "int", nullable: false),
@@ -29,19 +36,19 @@ namespace WetalkAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ChatOwners", x => new { x.UserID, x.ChatID });
+                    table.PrimaryKey("PK_ChatMembers", x => new { x.UserID, x.ChatID });
                     table.ForeignKey(
-                        name: "FK_ChatOwners_Chats_ChatID",
+                        name: "FK_ChatMembers_Chats_ChatID",
                         column: x => x.ChatID,
                         principalTable: "Chats",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_ChatOwners_Users_UserID",
+                        name: "FK_ChatMembers_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,9 +104,14 @@ namespace WetalkAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChatOwners_ChatID",
-                table: "ChatOwners",
+                name: "IX_ChatMembers_ChatID",
+                table: "ChatMembers",
                 column: "ChatID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Chats_OwnerID",
+                table: "Chats",
+                column: "OwnerID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_ChatID",
@@ -120,7 +132,7 @@ namespace WetalkAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ChatOwners");
+                name: "ChatMembers");
 
             migrationBuilder.DropTable(
                 name: "MessagesReads");
