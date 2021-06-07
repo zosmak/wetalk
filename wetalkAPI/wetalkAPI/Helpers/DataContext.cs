@@ -42,5 +42,6 @@ namespace WetalkAPI.Helpers
 
         public DbSet<User> Users { get; set; }
         public DbSet<UserPermission> UserPermissions { get; set; }
+        public DbSet<UserFile> UserFiles { get; set; }
     }
 }

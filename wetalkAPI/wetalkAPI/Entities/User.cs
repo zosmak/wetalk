@@ -1,4 +1,6 @@
-﻿namespace WetalkAPI.Entities
+﻿using System.Collections.Generic;
+
+namespace WetalkAPI.Entities
 {
     public class User
     {
@@ -11,5 +13,6 @@
 
         public int PermissionID { get; set; }
         public UserPermission Permission { get; set; }
+        public ICollection<UserFile> Files { get; set; }
     }
 }

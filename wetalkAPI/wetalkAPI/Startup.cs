@@ -15,6 +15,7 @@ using System.IO;
 using WetalkAPI.Helpers;
 using WetalkAPI.Services;
 using Swashbuckle.AspNetCore.Filters;
+using Microsoft.Extensions.FileProviders;
 
 namespace WetalkAPI
 {
@@ -33,6 +34,12 @@ namespace WetalkAPI
         {
             services.AddDbContext<DataContext>();
             services.AddCors();
+
+            // add files provider
+            services.AddSingleton<IFileProvider>(
+                new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot"))
+            );
+
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
