@@ -13,6 +13,7 @@ namespace WetalkAPI.Helpers
             // user
             CreateMap<User, UserModel>();
             CreateMap<RegisterUserModel, User>();
+            CreateMap<CreateUserModel, User>();
             CreateMap<UpdateUserModel, User>();
 
             // files

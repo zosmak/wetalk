@@ -69,8 +69,11 @@ namespace WetalkAPI.Services
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            // TODO: Change it
-            user.PermissionID = 2;
+
+            // permission not set, created by an user
+            if (user.PermissionID == 0)
+                user.PermissionID = 2;
+            user.Active = 1;
 
             _context.Users.Add(user);
             _context.SaveChanges();
@@ -119,11 +122,14 @@ namespace WetalkAPI.Services
         public void Delete(int id)
         {
             var user = _context.Users.Find(id);
-            if (user != null)
-            {
-                _context.Users.Remove(user);
-                _context.SaveChanges();
-            }
+
+            if (user == null)
+                throw new Exception("User not found");
+
+            user.Active = 0;
+
+            _context.Users.Update(user);
+            _context.SaveChanges();
         }
 
         // private helper methods
