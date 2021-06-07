@@ -31,7 +31,7 @@ namespace WetalkAPI.Services
         public UserFile Create(UserFile file)
         {
             // validation
-            if (file != null && string.IsNullOrEmpty(file.FileName))
+            if (file != null && !string.IsNullOrEmpty(file.FileName))
             {
                 _context.UserFiles.Add(file);
                 _context.SaveChanges();

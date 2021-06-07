@@ -69,6 +69,8 @@ namespace WetalkAPI.Services
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
+            // TODO: Change it
+            user.PermissionID = 2;
 
             _context.Users.Add(user);
             _context.SaveChanges();

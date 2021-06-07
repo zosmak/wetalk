@@ -23,7 +23,7 @@ namespace WetalkAPI.Helpers
         {
             modelBuilder.Entity<User>()
                 .HasOne(a => a.Permission)
-                .WithOne().OnDelete(DeleteBehavior.Restrict);
+                .WithMany().OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<UserPermission>().HasData(
                 new UserPermission

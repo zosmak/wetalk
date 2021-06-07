@@ -73,7 +73,7 @@ namespace MovieseekAPI.Controllers
         /// <response code="200">Returns the user with access token</response>
         /// <response code="400">Bad request</response>            
         [AllowAnonymous]
-        [HttpPost("Login")]
+        [HttpPost("login")]
         public IActionResult Authenticate([FromBody] AuthenticateUserModel model)
         {
             var user = _userService.Authenticate(model.Username, model.Password);

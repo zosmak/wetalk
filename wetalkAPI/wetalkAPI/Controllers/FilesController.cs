@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using WetalkAPI.Services;
 using System.Security.Claims;
+using System;
+using WetalkAPI.Entities;
 
 namespace MovieseekAPI.Controllers
 {
@@ -16,11 +18,13 @@ namespace MovieseekAPI.Controllers
     [Route("[controller]")]
     public class FilesController : ControllerBase
     {
+        private readonly IUserService _userService;
         private readonly IFileService _fileService;
         private readonly IMapper _mapper;
         private readonly AppSettings _appSettings;
 
         public FilesController(
+            IUserService _userService,
             IFileService fileService,
             IMapper mapper,
             IOptions<AppSettings> appSettings)
@@ -52,6 +56,14 @@ namespace MovieseekAPI.Controllers
                 file.CopyTo(stream);
             }
 
+            // associate filename to user
+            UserFile newFile = new UserFile
+            {
+                FileName = file.FileName,
+                UserID = int.Parse(User.Identity.Name)
+            };
+            _fileService.Create(newFile);
+
             return Ok();
         }
 
@@ -63,26 +75,38 @@ namespace MovieseekAPI.Controllers
         /// <response code="400">Bad request</response>
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [HttpGet]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult Download(string filename)
         {
             if (filename == null)
                 return Content("filename not present");
 
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-
-            var path = Path.Combine(
-                           Directory.GetCurrentDirectory(),
-                           "wwwroot", filename);
-
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
+            // get file and check if current user has that file
+            UserFile dbFile = _fileService.GetByName(filename);
+            try
             {
-                stream.CopyTo(memory);
+                if (dbFile != null && dbFile.UserID == int.Parse(User.Identity.Name))
+                {
+
+                    var path = Path.Combine(
+                                         Directory.GetCurrentDirectory(),
+                                         "wwwroot", filename);
+
+                    var memory = new MemoryStream();
+                    using (var stream = new FileStream(path, FileMode.Open))
+                    {
+                        stream.CopyTo(memory);
+                    }
+                    memory.Position = 0;
+                    string mimeType = MimeTypes.GetMimeType(filename);
+                    return File(memory, mimeType, Path.GetFileName(path));
+                }
             }
-            memory.Position = 0;
-            string mimeType = MimeTypes.GetMimeType(filename);
-            return File(memory, mimeType, Path.GetFileName(path));
+            catch (Exception)
+            {
+            }
+
+            return BadRequest("File doesn't exist or user doesn't have access to it.");
         }
     }
 }
