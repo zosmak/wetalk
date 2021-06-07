@@ -280,6 +280,42 @@ namespace MovieseekAPI.Controllers
         }
 
         /// <summary>
+        /// Updates an user
+        /// </summary>
+        /// <response code="200">Returns OK</response>
+        /// <response code="400">Bad request</response>            
+        /// <response code="401">Unauthorized</response>            
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPut("changePassword")]
+        public IActionResult ChangePassword([FromBody] ChangePasswordModel userPasswordModel)
+        {
+            try
+            {
+                if (User.Identity.Name != null)
+                {
+                    // get user permissions
+                    var currentUser = _userService.GetById(int.Parse(User.Identity.Name));
+
+                    if (currentUser == null)
+                    {
+                        BadRequest("Current user not found");
+                    }
+                    // update user
+                    _userService.Update(currentUser, userPasswordModel.Password);
+
+                    return Ok();
+                }
+
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        /// <summary>
         /// Deletes an user
         /// </summary>
         /// <response code="204"></response>

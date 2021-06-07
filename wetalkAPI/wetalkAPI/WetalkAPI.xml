@@ -84,6 +84,14 @@
             <response code="401">Unauthorized</response>            
             <response code="404">User wasn't found</response>
         </member>
+        <member name="M:MovieseekAPI.Controllers.UsersController.ChangePassword(WetalkAPI.Models.Users.ChangePasswordModel)">
+            <summary>
+            Updates an user
+            </summary>
+            <response code="200">Returns OK</response>
+            <response code="400">Bad request</response>            
+            <response code="401">Unauthorized</response>            
+        </member>
         <member name="M:MovieseekAPI.Controllers.UsersController.Delete(System.Int32)">
             <summary>
             Deletes an user
