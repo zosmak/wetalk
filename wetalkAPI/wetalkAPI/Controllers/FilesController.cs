@@ -108,7 +108,7 @@ namespace MovieseekAPI.Controllers
         }
 
         /// <summary>
-        /// Download an user files list
+        /// Get user files list
         /// </summary>
         /// <response code="200">Returns the users</response>
         /// <response code="401">Unauthorized</response>
@@ -120,6 +120,28 @@ namespace MovieseekAPI.Controllers
             List<UserFile> files = _fileService.GetUserFiles(int.Parse(User.Identity.Name));
             var result = _mapper.Map<List<FileModel>>(files);
             return Ok(result);
+        }
+
+        /// <summary>
+        /// Remove an user file
+        /// </summary>
+        /// <response code="200">Ok</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="400">Bad request</response>
+        [HttpDelete("deleteUserFile")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public IActionResult DeleteUserFile(string fileName)
+        {
+            List<UserFile> files = _fileService.GetUserFiles(int.Parse(User.Identity.Name));
+
+            var fileToDelete = files.Find(x => x.FileName == fileName);
+            if (fileToDelete != null)
+            {
+                _fileService.Delete(fileName);
+                return Ok();
+            }
+
+            return NotFound("File doesn't exist or user doens't have the permission to delete it");
         }
     }
 }

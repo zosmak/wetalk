@@ -28,6 +28,14 @@
             <response code="401">Unauthorized</response>
             <response code="400">Bad request</response>
         </member>
+        <member name="M:MovieseekAPI.Controllers.FilesController.DeleteUserFile(System.String)">
+            <summary>
+            Download an user files list
+            </summary>
+            <response code="200">Ok</response>
+            <response code="401">Unauthorized</response>
+            <response code="400">Bad request</response>
+        </member>
         <member name="M:MovieseekAPI.Controllers.UsersController.GetAll">
             <summary>
             Gets all users
