@@ -19,6 +19,28 @@ namespace WetalkAPI.Helpers
             options.UseSqlServer(Configuration.GetConnectionString("WetalkDatabase"));
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasOne(a => a.Permission)
+                .WithOne().OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserPermission>().HasData(
+                new UserPermission
+                {
+                    ID = 1,
+                    Description = "Admin",
+                },
+                new UserPermission
+                {
+                    ID = 2,
+                    Description = "User",
+                }
+            );
+        }
+
+
         public DbSet<User> Users { get; set; }
+        public DbSet<UserPermission> UserPermissions { get; set; }
     }
 }
