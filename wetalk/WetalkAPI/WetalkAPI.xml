@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WetalkAPI</name>
+    </assembly>
+    <members>
+        <member name="M:MovieseekAPI.Controllers.FilesController.UploadFile(Microsoft.AspNetCore.Http.IFormFile)">
+            <summary>
+            Upload an user file
+            </summary>
+            <response code="200">Returns OK</response>
+            <response code="401">Unauthorized</response>
+            <response code="400">Bad request</response>
+        </member>
+        <member name="M:MovieseekAPI.Controllers.FilesController.Download(System.String)">
+            <summary>
+            Download an user file
+            </summary>
+            <response code="200">Returns the file</response>
+            <response code="401">Unauthorized</response>
+            <response code="400">Bad request</response>
+        </member>
+        <member name="M:MovieseekAPI.Controllers.FilesController.GetUserFiles">
+            <summary>
+            Get user files list
+            </summary>
+            <response code="200">Returns the users</response>
+            <response code="401">Unauthorized</response>
+            <response code="400">Bad request</response>
+        </member>
+        <member name="M:MovieseekAPI.Controllers.FilesController.DeleteUserFile(System.String)">
+            <summary>
+            Remove an user file
+            </summary>
+            <response code="200">Ok</response>
+            <response code="401">Unauthorized</response>
+            <response code="400">Bad request</response>
+        </member>
+        <member name="M:MovieseekAPI.Controllers.UsersController.Authenticate(WetalkAPI.Models.Users.AuthenticateUserModel)">
+            <summary>
+            Authenticate a user
+            </summary>
+            <response code="200">Returns the user with access token</response>
+            <response code="400">Bad request</response>            
+        </member>
+        <member name="M:MovieseekAPI.Controllers.UsersController.Register(WetalkAPI.Models.Users.RegisterUserModel)">
+            <summary>
+            Creates a user
+            </summary>
+            <response code="200">Returns the created user autenticated</response>
+            <response code="400">Bad request</response>            
+        </member>
+        <member name="M:MovieseekAPI.Controllers.UsersController.GetAll">
+            <summary>
+            Gets all users
+            </summary>
+            <response code="201">Returns the users</response>
+            <response code="401">Unauthorized</response>
+            <response code="403">Forbidden</response>
+        </member>
+        <member name="M:MovieseekAPI.Controllers.UsersController.GetById(System.Int32)">
+            <summary>
+            Get a user by id
+            </summary>
+            <response code="200">Returns the user</response>
+            <response code="401">Unauthorized</response>            
+            <response code="403">Forbidden</response>
+            <response code="404">User wasn't found</response>
+        </member>
+        <member name="M:MovieseekAPI.Controllers.UsersController.Create(WetalkAPI.Models.Users.CreateUserModel)">
+            <summary>
+            Creates a user
+            </summary>
+            <response code="200">Returns the created user</response>
+            <response code="400">Bad request</response>            
+            <response code="403">Forbidden</response>            
+        </member>
+        <member name="M:MovieseekAPI.Controllers.UsersController.Update(System.Int32,WetalkAPI.Models.Users.UpdateUserModel)">
+            <summary>
+            Updates an user
+            </summary>
+            <response code="200">Returns the updated user</response>
+            <response code="400">Bad request</response>            
+            <response code="401">Unauthorized</response>            
+            <response code="404">User wasn't found</response>
+        </member>
+        <member name="M:MovieseekAPI.Controllers.UsersController.Delete(System.Int32)">
+            <summary>
+            Deletes an user
+            </summary>
+            <response code="204"></response>
+            <response code="401">Unauthorized</response>            
+            <response code="404">User wasn't found</response>            
+        </member>
+        <member name="T:WetalkAPI.MimeTypes">
+            <summary>
+            Provides utilities for mapping file names and extensions to MIME-types.
+            </summary>
+        </member>
+        <member name="P:WetalkAPI.MimeTypes.FallbackMimeType">
+            <summary>
+            The fallback MIME-type. Defaults to <c>application/octet-stream</c>.
+            </summary>
+        </member>
+        <member name="M:WetalkAPI.MimeTypes.GetMimeTypeExtensions(System.String)">
+            <summary>
+            Attempts to fetch all available file extensions for a MIME-type.
+            </summary>
+            <param name="mimeType">The name of the MIME-type</param>
+            <returns>All available extensions for the given MIME-type</returns>
+        </member>
+        <member name="M:WetalkAPI.MimeTypes.TryGetMimeType(System.String,System.String@)">
+            <summary>
+            Tries to get the MIME-type for the given file name.
+            </summary>
+            <param name="fileName">The name of the file.</param>
+            <param name="mimeType">The MIME-type for the given file name.</param>
+            <returns><c>true</c> if a MIME-type was found, <c>false</c> otherwise.</returns>
+        </member>
+        <member name="M:WetalkAPI.MimeTypes.GetMimeType(System.String)">
+            <summary>
+            Gets the MIME-type for the given file name,
+            or <see cref="P:WetalkAPI.MimeTypes.FallbackMimeType"/> if a mapping doesn't exist.
+            </summary>
+            <param name="fileName">The name of the file.</param>
+            <returns>The MIME-type for the given file name.</returns>
+        </member>
+    </members>
+</doc>
