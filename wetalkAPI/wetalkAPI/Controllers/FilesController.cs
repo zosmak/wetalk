@@ -11,6 +11,8 @@ using WetalkAPI.Services;
 using System.Security.Claims;
 using System;
 using WetalkAPI.Entities;
+using System.Collections.Generic;
+using WetalkAPI.Models.Files;
 
 namespace MovieseekAPI.Controllers
 {
@@ -18,20 +20,17 @@ namespace MovieseekAPI.Controllers
     [Route("[controller]")]
     public class FilesController : ControllerBase
     {
-        private readonly IUserService _userService;
-        private readonly IFileService _fileService;
         private readonly IMapper _mapper;
-        private readonly AppSettings _appSettings;
+        private readonly IFileService _fileService;
 
         public FilesController(
-            IUserService _userService,
             IFileService fileService,
-            IMapper mapper,
-            IOptions<AppSettings> appSettings)
+            IMapper mapper
+            )
         {
             _fileService = fileService;
             _mapper = mapper;
-            _appSettings = appSettings.Value;
+
         }
 
         /// <summary>
@@ -41,7 +40,7 @@ namespace MovieseekAPI.Controllers
         /// <response code="401">Unauthorized</response>
         /// <response code="400">Bad request</response>
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpPost]
+        [HttpPost("upload")]
         public IActionResult UploadFile(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -70,11 +69,10 @@ namespace MovieseekAPI.Controllers
         /// <summary>
         /// Download an user file
         /// </summary>
-        /// <response code="200">Returns the users</response>
+        /// <response code="200">Returns the file</response>
         /// <response code="401">Unauthorized</response>
         /// <response code="400">Bad request</response>
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [HttpGet]
+        [HttpGet("download")]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public IActionResult Download(string filename)
         {
@@ -107,6 +105,21 @@ namespace MovieseekAPI.Controllers
             }
 
             return BadRequest("File doesn't exist or user doesn't have access to it.");
+        }
+
+        /// <summary>
+        /// Download an user files list
+        /// </summary>
+        /// <response code="200">Returns the users</response>
+        /// <response code="401">Unauthorized</response>
+        /// <response code="400">Bad request</response>
+        [HttpGet("getUserFiles")]
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        public IActionResult GetUserFiles()
+        {
+            List<UserFile> files = _fileService.GetUserFiles(int.Parse(User.Identity.Name));
+            var result = _mapper.Map<List<FileModel>>(files);
+            return Ok(result);
         }
     }
 }

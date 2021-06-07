@@ -1,5 +1,7 @@
 using AutoMapper;
+using System.Collections.Generic;
 using WetalkAPI.Entities;
+using WetalkAPI.Models.Files;
 using WetalkAPI.Models.Users;
 
 namespace WetalkAPI.Helpers
@@ -12,6 +14,10 @@ namespace WetalkAPI.Helpers
             CreateMap<User, UserModel>();
             CreateMap<RegisterUserModel, User>();
             CreateMap<UpdateUserModel, User>();
+
+            // files
+            CreateMap<UserFile, FileModel>();
+
         }
     }
 }

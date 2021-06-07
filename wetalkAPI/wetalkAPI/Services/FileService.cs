@@ -10,6 +10,7 @@ namespace WetalkAPI.Services
     public interface IFileService
     {
         UserFile GetByName(string fileName);
+        List<UserFile> GetUserFiles(int userID);
         UserFile Create(UserFile file);
         void Delete(string fileName);
     }
@@ -26,6 +27,11 @@ namespace WetalkAPI.Services
         public UserFile GetByName(string fileName)
         {
             return _context.UserFiles.Find(fileName);
+        }
+
+        public List<UserFile> GetUserFiles(int userID)
+        {
+            return _context.UserFiles.Where(f => f.UserID == userID).ToList();
         }
 
         public UserFile Create(UserFile file)
