@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.Extensions.Options;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using WetalkAPI.Services;
-using WetalkAPI.Models.Users;
 using WetalkAPI.Helpers;
 using AutoMapper;
 using WetalkAPI.Entities;
