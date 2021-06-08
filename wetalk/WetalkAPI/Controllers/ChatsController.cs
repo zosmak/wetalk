@@ -53,7 +53,7 @@ namespace WetalkAPI.Controllers
                 try
                 {
                     // create new chat
-                    var userChats = _chatService.GetAll(int.Parse(User.Identity.Name));
+                    var userChats = _chatService.GetAllUserChat(int.Parse(User.Identity.Name));
                     return Ok(userChats);
                 }
                 catch (Exception ex)
@@ -137,7 +137,7 @@ namespace WetalkAPI.Controllers
             if (User.Identity.Name != null)
             {
                 // check if current user is a member
-                var currentUserChats = _chatService.GetAll(int.Parse(User.Identity.Name));
+                var currentUserChats = _chatService.GetAllUserChat(int.Parse(User.Identity.Name));
 
                 if (currentUserChats.Any(x => x.ID == id))
                 {
@@ -183,6 +183,36 @@ namespace WetalkAPI.Controllers
                     return BadRequest("Message not found or user doens't have permission to remove it");
                 }
 
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                // return error message if there was an exception
+                return BadRequest(new
+                {
+                    message = ex.Message
+                });
+            }
+        }
+
+        /// <summary>
+        /// Marks a chat message as read
+        /// </summary>
+        /// <response code="204">No content</response>
+        /// <response code="400">Bad request</response>            
+        /// <response code="401">Unauthorized</response>            
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [HttpPut("message/{messageID}/read")]
+        public IActionResult ReadMessage(int messageID)
+        {
+            try
+            {
+                if (User.Identity.Name != null)
+                {
+
+                    _chatService.MarkMessageAsRead(int.Parse(User.Identity.Name), messageID);
+                    return NoContent();
+                }
                 return Unauthorized();
             }
             catch (Exception ex)

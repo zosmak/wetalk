@@ -11,8 +11,9 @@ namespace WetalkAPI.Services
     public interface IChatService
     {
         #region CHAT
-        List<ChatResponse> GetAll(int userID);
-        Chat GetChatById(int id);
+        List<Chat> GetAll();
+        List<ChatResponse> GetAllUserChat(int userID);
+        ChatResponse GetChatById(int userID, int id);
         Chat CreateChat(Chat chat);
         void DeleteChat(int id);
         #endregion
@@ -25,6 +26,7 @@ namespace WetalkAPI.Services
         #region CHAT MESSAGE
         Message GetMessageByID(int messageID);
         Message CreateChatMessage(int chatID, int userID, string message);
+        void MarkMessageAsRead(int userID, int messageID);
         void DeleteChatMessage(int messageID);
         #endregion
     }
@@ -39,10 +41,17 @@ namespace WetalkAPI.Services
         }
 
         #region CHAT
-        public List<ChatResponse> GetAll(int userID)
+        public List<Chat> GetAll()
+        {
+            return _context.Chats.AsNoTracking()
+                .Include(x => x.Messages.OrderByDescending(m => m.CreatedAt))
+                .ToList();
+        }
+
+        public List<ChatResponse> GetAllUserChat(int userID)
         {
             var currentUserChats = _context.ChatMembers.Where(x => x.UserID == userID).Select(x => x.ChatID);
-            // }<
+
             return _context.Chats.AsNoTracking()
                 .Include(x => x.Messages.OrderByDescending(m => m.CreatedAt))
                 .Select(y => new ChatResponse { ID = y.ID, Name = y.Name, OwnerID = y.OwnerID, Messages = y.Messages.Select(x => new ChatResponse.ResponseMessage { ChatID = x.ChatID, ID = x.ID, SenderID = x.SenderID, CreatedAt = x.CreatedAt, Description = x.Description, Read = _context.MessagesReads.Any(r => r.UserID == userID && r.MessageID == x.ID) }).ToList() })
@@ -50,9 +59,12 @@ namespace WetalkAPI.Services
                 .ToList();
         }
 
-        public Chat GetChatById(int id)
+        public ChatResponse GetChatById(int userID, int id)
         {
-            return _context.Chats.Find(id);
+            return _context.Chats.AsNoTracking()
+            .Include(x => x.Messages.OrderByDescending(m => m.CreatedAt))
+            .Select(y => new ChatResponse { ID = y.ID, Name = y.Name, OwnerID = y.OwnerID, Messages = y.Messages.Select(x => new ChatResponse.ResponseMessage { ChatID = x.ChatID, ID = x.ID, SenderID = x.SenderID, CreatedAt = x.CreatedAt, Description = x.Description, Read = _context.MessagesReads.Any(r => r.UserID == userID && r.MessageID == x.ID) }).ToList() })
+            .FirstOrDefault(x => x.ID == id);
         }
 
         public Chat CreateChat(Chat chat)
@@ -137,6 +149,26 @@ namespace WetalkAPI.Services
                 _context.Messages.Remove(chatMessage);
                 _context.SaveChanges();
             }
+        }
+
+        public void MarkMessageAsRead(int userID, int messageID)
+        {
+            var userChats = GetAllUserChat(userID);
+
+            if (userChats.Any(x => x.Messages.Any(y => y.ID == messageID)))
+            {
+                var newReadItem = new MessageRead()
+                {
+                    MessageID = messageID,
+                    ReadAt = DateTime.Now,
+                    UserID = userID,
+                };
+
+                _context.MessagesReads.Add(newReadItem);
+                _context.SaveChanges();
+            }
+
+            throw new Exception("Message doens't exit or user doens't have permission to see it");
         }
         #endregion
     }
