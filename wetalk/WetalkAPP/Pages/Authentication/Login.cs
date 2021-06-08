@@ -26,9 +26,8 @@ namespace WetalkAPP.Pages.Auth
                     var APIService = new APIService();
                     await APIService.Login(UsernameTextBox.Text, PasswordTextBox.Text);
                     Hide();
-                    //TODO: go to main page and hide this page
-                    //Main.Movieseek MovieseekForm = new Main.Movieseek();
-                    //MovieseekForm.Show();
+                    Menu.Menu MenuForm = new Menu.Menu();
+                    MenuForm.Show();
                 }
             }
             catch (Exception error)

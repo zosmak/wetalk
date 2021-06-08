@@ -19,6 +19,8 @@ namespace WetalkAPI.Services
         #endregion
 
         #region CHAT MEMBER
+        List<ChatMember> GetChatMembers(int chatID);
+        bool CheckIfChatMember(int userID, int chatID);
         ChatMember CreateChatMember(int chatID, int userID);
         void DeleteChatMember(int chatID, int userID);
         #endregion
@@ -94,6 +96,21 @@ namespace WetalkAPI.Services
 
 
         #region CHAT MEMBER
+        public bool CheckIfChatMember(int userID, int chatID)
+        {
+            var chatMember = _context.ChatMembers.FirstOrDefault(x => x.ChatID == chatID && x.UserID == userID);
+            if (chatMember != null)
+                return true;
+            return false;
+        }
+
+        public List<ChatMember> GetChatMembers(int chatID)
+        {
+            return _context.ChatMembers
+                .Where(x => x.ChatID == chatID)
+                .ToList();
+        }
+
         public ChatMember CreateChatMember(int chatID, int userID)
         {
             var newChatMember = new ChatMember()
@@ -166,6 +183,7 @@ namespace WetalkAPI.Services
 
                 _context.MessagesReads.Add(newReadItem);
                 _context.SaveChanges();
+                return;
             }
 
             throw new Exception("Message doens't exit or user doens't have permission to see it");

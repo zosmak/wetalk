@@ -16,11 +16,7 @@ namespace WetalkAPP.Services
     {
         #region constructor
         static HttpClient _client;
-        static LoginResponse user;
-
-        public APIService()
-        {
-        }
+        public static LoginResponse user;
 
         public void InitializeAPIService()
         {
@@ -99,7 +95,55 @@ namespace WetalkAPP.Services
         }
         #endregion
 
-        #region messages
+        #region chats
+        public async Task<List<ChatResponse>> GetUserChats()
+        {
+            // build request params from configs
+            string request = $"{ConfigurationManager.AppSettings["API.Address"]}/chats";
+            HttpResponseMessage result = await _client.GetAsync(request);
+
+            if (result.IsSuccessStatusCode)
+            {
+                string resultContent = await result.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<ChatResponse>>(resultContent);
+            }
+            else
+            {
+            }
+            return new List<ChatResponse>();
+        }
+        public async Task SendChatMessage(int chatID, string message)
+        {
+            // build request params from configs
+            string request = $"{ConfigurationManager.AppSettings["API.Address"]}/chats/{chatID}/message";
+
+            var stringContent = new StringContent(JsonConvert.SerializeObject(
+              new CreateChatMessageModel()
+              {
+                  Message = message
+              }), Encoding.UTF8, "application/json");
+
+
+            HttpResponseMessage result = await _client.PostAsync(request, stringContent);
+
+            if (!result.IsSuccessStatusCode)
+            {
+            }
+        }
+
+        public async Task MarkMessageAsRead(int messageID)
+        {
+            // build request params from configs
+            string request = $"{ConfigurationManager.AppSettings["API.Address"]}/chats/message/{messageID}/read";
+            var stringContent = new StringContent("", Encoding.UTF8, "application/json");
+
+            HttpResponseMessage result = await _client.PutAsync(request, stringContent);
+
+            if (!result.IsSuccessStatusCode)
+            {
+            }
+        }
+
         #endregion
     }
 }

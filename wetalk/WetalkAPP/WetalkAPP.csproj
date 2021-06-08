@@ -9,14 +9,17 @@
   <ItemGroup>
     <Folder Include="Pages\Management\" />
     <Folder Include="Pages\Files\" />
-    <Folder Include="Pages\Chat\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.SignalR.Client" Version="2.4.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Pages\Chat\Chat.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Pages\Menu\Menu.cs">
       <SubType>Form</SubType>
     </Compile>

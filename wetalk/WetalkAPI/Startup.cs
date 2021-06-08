@@ -34,6 +34,7 @@ namespace WetalkAPI
         {
             services.AddDbContext<DataContext>();
             services.AddCors();
+            services.AddSignalR();
 
             // add files provider
             services.AddSingleton<IFileProvider>(
@@ -147,7 +148,11 @@ namespace WetalkAPI
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<NotificationService>("/notification");
+                endpoints.MapControllers();
+            });
         }
     }
 }

@@ -14,18 +14,18 @@ namespace WetalkAPP.Pages.Menu
         private void ChatButton_Click(object sender, EventArgs e)
         {
             Hide();
-            //Main.Movieseek MovieseekForm = new Main.Movieseek();
-            //MovieseekForm.Show();
+            Chat.Chat ChatForm = new Chat.Chat();
+            ChatForm.Show();
         }
 
         private void FilesButton_Click(object sender, EventArgs e)
         {
-            Hide();
+            //Hide();
         }
 
         private void ManageButton_Click(object sender, EventArgs e)
         {
-            Hide();
+            //Hide();
         }
 
         private void QuitButton_Click(object sender, EventArgs e)
