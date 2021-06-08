@@ -35,6 +35,14 @@
             <response code="400">Bad request</response>            
             <response code="401">Unauthorized</response>            
         </member>
+        <member name="M:WetalkAPI.Controllers.ChatsController.ReadMessage(System.Int32)">
+            <summary>
+            Marks a chat message as read
+            </summary>
+            <response code="204">No content</response>
+            <response code="400">Bad request</response>            
+            <response code="401">Unauthorized</response>            
+        </member>
         <member name="M:WetalkAPI.Controllers.FilesController.UploadFile(Microsoft.AspNetCore.Http.IFormFile)">
             <summary>
             Upload an user file
